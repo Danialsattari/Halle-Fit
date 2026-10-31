@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>دانیال ستاری | برنامه افزایش وزن و حجم</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        /* ================= پالت رنگی و متغیرها ================= */
+        :root {
+            /* پالت رنگی اصلی */
+            --bg-base: #EAF2F2;
+            --bg-card: rgba(191, 201, 209, 0.85); /* افکت شیشه‌ای */
+            --bg-card-solid: #BFC9D1;
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --text-main: #25343F;
+            --text-muted: #5a6a7a;
+            --accent-primary: #FF9B51;
+            --accent-hover: #e07b30;
+            --border-light: rgba(255, 255, 255, 0.35);
+            --border-input: rgba(37, 52, 63, 0.06);
+            --shadow-main: 0 20px 60px -16px rgba(37, 52, 63, 0.12);
+            --nav-bg: rgba(191, 201, 209, 0.9);
+            --check-border: rgba(37, 52, 63, 0.2);
+            --gradient-1: rgba(255,155,81,0.06);
+            --gradient-2: rgba(37,52,63,0.03);
+        }
+
+        /* متغیرهای حالت تاریک */
+        [data-theme="dark"] {
+            --bg-base: #15202B;
+            --bg-card: rgba(37, 52, 63, 0.85);
+            --bg-card-solid: #25343F;
+            --bg-input: rgba(255, 255, 255, 0.05);
+            --text-main: #EAF2F2;
+            --text-muted: #9ca3af;
+            --accent-primary: #FF9B51;
+            --accent-hover: #ffb074;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-input: rgba(255, 255, 255, 0.1);
+            --shadow-main: 0 20px 60px -16px rgba(0, 0, 0, 0.4);
+            --nav-bg: rgba(37, 52, 63, 0.9);
+            --check-border: rgba(234, 242, 242, 0.3);
+            --gradient-1: rgba(255,155,81,0.04);
+            --gradient-2: rgba(0,0,0,0.1);
+        }
+
+        /* ================= تنظیمات پایه و روان‌سازی ================= */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            padding-bottom: 100px;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* افکت گرادیانت پس‌زمینه */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, var(--gradient-1) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, var(--gradient-2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            transition: background 0.35s ease;
+        }
+
+        /* ================= هدر ================= */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 20px 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+
+        .header-titles p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* دکمه دارک مود */
+        .theme-toggle {
+            background: var(--bg-card-solid);
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.9);
+        }
+
+        /* ================= منوی ناوبری پایین ================= */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid var(--border-light);
+            z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -10px 30px rgba(37,52,63,0.05);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 18px 10px;
+            cursor: pointer;
+            flex: 1;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav button.active {
+            color: var(--text-main);
+            font-weight: 800;
+        }
+
+        nav button.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background-color: var(--accent-primary);
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* ================= محتوای اصلی و کارت‌ها ================= */
+        main {
+            padding: 0 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* انیمیشن نرم برای تب‌ها */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* کارت‌های شیشه‌ای (Glassmorphism) */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 36px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-main);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-input);
+            padding-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* ================= اطلاعات ورزشکار ================= */
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-input);
+        }
+
+        .profile-row:last-child { border-bottom: none; }
+
+        .profile-row .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .profile-row .value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .profile-row .value.coach {
+            color: var(--accent-primary);
+        }
+
+        /* ================= فرم‌ها ================= */
+        select, input {
+            width: 100%;
+            background: var(--bg-input);
+            color: var(--text-main);
+            border: 1px solid var(--border-input);
+            padding: 14px 18px;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(255, 155, 81, 0.15);
+            background: var(--bg-card-solid);
+        }
+
+        /* ================= لیست تمرینات ================= */
+        .exercise-item {
+            display: flex;
+            flex-direction: column;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-input);
+        }
+
+        .exercise-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .exercise-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .exercise-info h4 {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .exercise-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .exercise-note {
+            font-size: 11px;
+            color: var(--accent-primary);
+            background: rgba(255, 155, 81, 0.12);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        /* ================= چک‌باکس دایره‌ای با انیمیشن ================= */
+        .custom-checkbox {
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--check-border);
+            border-radius: 50%; /* کاملاً دایره‌ای */
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            background: transparent;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+        }
+
+        .custom-checkbox:active {
+            transform: scale(0.85); /* افکت فشردن هنگام کلیک */
+        }
+
+        .custom-checkbox:checked {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            animation: popBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* انیمیشن پاپ (بزرگ و کوچک شدن) هنگام تیک خوردن */
+        @keyframes popBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+
+        /* علامت تیک با انیمیشن کشیده شدن */
+        .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 9px;
+            width: 5px;
+            height: 11px;
+            border: solid #fff;
+            border-width: 0 2.5px 2.5px 0;
+            transform: rotate(45deg) scale(0); /* در حالت عادی مخفی */
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .custom-checkbox:checked::after {
+            transform: rotate(45deg) scale(1); /* هنگام تیک، ظاهر شود */
+            opacity: 1;
+        }
+
+        /* کنترل‌های تمرین */
+        .exercise-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            align-items: center;
+        }
+
+        .exercise-controls input {
+            margin-bottom: 0;
+            padding: 10px;
+            font-size: 12px;
+            text-align: center;
+            flex: 1;
+            border-radius: 30px;
+        }
+
+        .timer-btn {
+            background: var(--bg-card-solid);
+            color: var(--text-main);
+            border: 1px solid var(--border-input);
+            padding: 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            flex: 1.2;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .timer-btn:active {
+            transform: scale(0.95);
+            background: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+
+        /* ================= تغذیه ================= */
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .macro-box {
+            background: var(--bg-input);
+            padding: 12px 4px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .macro-box span {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .macro-box strong {
+            font-size: 14px;
+            color: var(--accent-primary);
+        }
+
+        .meal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-input);
+        }
+
+        .meal-info h4 {
+            font-size: 13px;
+            color: var(--accent-primary);
+            margin-bottom: 6px;
+            font-weight: 800;
+        }
+
+        .meal-info p {
+            font-size: 12px;
+            color: var(--text-main);
+            line-height: 1.8;
+        }
+
+        /* ================= تایمر شناور ================= */
+        #floating-timer {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-30px);
+            background: var(--bg-card-solid);
+            color: var(--text-main);
+            border: 2px solid var(--accent-primary);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 800;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            opacity: 0;
+            z-index: 1000;
+            cursor: pointer;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #floating-timer.active {
+            display: flex;
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+            direction: ltr;
+        }
+
+        .timer-stop {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ================= تایم‌لاین ================= */
+        .timeline {
+            position: relative;
+            padding-right: 20px;
+            border-right: 2px solid var(--border-input);
+            margin-right: 10px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -27px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--bg-card-solid);
+            border: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item h4 {
+            font-size: 13px;
+            margin-bottom: 4px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .timeline-item p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ================= فوتر ================= */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-input);
+            color: var(--text-muted);
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .footer .badge {
+            background: var(--accent-primary);
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .footer .divider {
+            width: 1px;
+            height: 14px;
+            background: var(--border-input);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="floating-timer" onclick="stopTimer()">
+        <span class="timer-display" id="timer-text">00:00</span>
+        <span class="timer-stop">(توقف)</span>
+    </div>
+
+    <header>
+        <div class="header-titles">
+            <h1>دانیال ستاری</h1>
+            <p>برنامه افزایش وزن و حجم | پوش پول لگ ۵ روزه</p>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" aria-label="تغییر تم">
+            <!-- آیکون با جاوااسکریپت تغییر می‌کند -->
+        </button>
+    </header>
+
+    <main>
+        <!-- داشبورد -->
+        <section id="dashboard" class="tab-content active">
+            <div class="glass-card">
+                <div class="card-header">مشخصات ورزشکار</div>
+                <div class="profile-row">
+                    <span class="label">نام ورزشکار</span>
+                    <span class="value">دانیال ستاری</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">نام مربی</span>
+                    <span class="value coach">مهدی وظیفه</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">قد / وزن فعلی</span>
+                    <span class="value">۱۹۵ cm / ۸۰ kg</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">سطح</span>
+                    <span class="value">مبتدی</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">هدف</span>
+                    <span class="value">افزایش وزن و سایر</span>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-header">وضعیت امروز</div>
+                <p id="today-date" class="subtitle"></p>
+                
+                <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; display: block; font-weight: 700;">هفته برنامه (۱ تا ۱۲):</label>
+                <select id="week-selector" onchange="updateCoachTip()">
+                    <!-- با JS پر می‌شود -->
+                </select>
+
+                <div style="background: var(--bg-input); border-right: 4px solid var(--accent-primary); padding: 16px; border-radius: 20px;">
+                    <p id="coach-tip" style="font-size: 12px; line-height: 1.8;"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- تمرین -->
+        <section id="workout" class="tab-content">
+            <div class="glass-card">
+                <h2 class="card-header" id="workout-day-title"></h2>
+                <p id="workout-target" class="subtitle"></p>
+                <div id="workout-list"></div>
+            </div>
+        </section>
+
+        <!-- تغذیه -->
+        <section id="nutrition" class="tab-content">
+            <div class="glass-card">
+                <h2 class="card-header">برنامه غذایی</h2>
+                
+                <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; display: block; font-weight: 700;">نوع روز:</label>
+                <select id="diet-day-type" onchange="renderDiet()">
+                    <option value="training">روز تمرین (شنبه، یکشنبه، دوشنبه، چهارشنبه، پنجشنبه)</option>
+                    <option value="rest">روز استراحت (سه‌شنبه، جمعه)</option>
+                </select>
+                
+                <div class="macro-grid" id="macro-summary"></div>
+                
+                <div id="diet-list"></div>
+            </div>
+        </section>
+        
+        <!-- پیشرفت -->
+        <section id="progress" class="tab-content">
+            <div class="glass-card">
+                <h2 class="card-header">برنامه پیشرفت ۱۲ هفته‌ای</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>هفته ۱ تا ۲: آشنایی با حرکات</h4>
+                        <p>وزنه سبک (۳ تا ۴ تکرار مانده)، تمرکز روی فرم و دامنه کامل.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>هفته ۳ تا ۶: پیشرفت منظم</h4>
+                        <p>اضافه بار هر جلسه با هر هفته طبق قانون بازه تکرار.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>هفته ۷: هفته سبک (دیلود)</h4>
+                        <p>یک ست کمتر در هر حرکت و ۸۰٪ وزنه‌ها.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>هفته ۸ تا ۱۱: پیشرفت ادامه‌دار</h4>
+                        <p>همان ساختار: وزنه‌ها بالاتر از هفته ۶.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>هفته ۱۲: دیلود + ارزیابی</h4>
+                        <p>وزن، دور بازو/سینه/ران/کمر، عکس و بازبینی برنامه.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- فوتر اختصاصی -->
+        <div class="footer">
+            <span>طراحی شده توسط دانیال ستاری</span>
+            <span class="divider"></span>
+            <span class="badge">۸۰۰۸</span>
+        </div>
+    </main>
+
+    <nav>
+        <button onclick="switchTab('dashboard', this)" class="active">داشبورد</button>
+        <button onclick="switchTab('workout', this)">تمرین</button>
+        <button onclick="switchTab('nutrition', this)">تغذیه</button>
+        <button onclick="switchTab('progress', this)">پیشرفت</button>
+    </nav>
+
+    <script>
+        // ================= سیستم دارک مود =================
+        const themeBtn = document.getElementById('themeBtn');
+        const htmlElement = document.documentElement;
+
+        // آیکون‌های SVG
+        const sunIcon = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+        const moonIcon = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeBtn.innerHTML = sunIcon; 
+            } else {
+                themeBtn.innerHTML = moonIcon; 
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('app-theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        // بارگذاری تم ذخیره شده
+        const savedTheme = localStorage.getItem('app-theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+
+        // ================= دیتای تمرینی =================
+        const workoutData = {
+            saturday: {
+                title: "شنبه • پوش A",
+                target: "سینه • شانه • پشت بازو",
+                exercises: [
+                    { id: "s1", name: "پرس سینه دمبل تخت", sets: "۳", reps: "۸-۱۰", rest: 90, note: "حرکت اصلی، هفته‌های اول فرم را وزنه کن" },
+                    { id: "s2", name: "پرس بالا سینه دمبل", sets: "۳", reps: "۱۰-۱۲", rest: 90, note: "نیمکت ۳۰ درجه" },
+                    { id: "s3", name: "پرس سرشانه دستگاه", sets: "۳", reps: "۱۰-۱۲", rest: 90, note: "کمر چسبیده به پشتی" },
+                    { id: "s4", name: "نشر جانب دمبل", sets: "۳", reps: "۱۲-۱۵", rest: 60, note: "وزنه سبک، بدون تاب" },
+                    { id: "s5", name: "فلای سیم‌کش / پک دک", sets: "۳", reps: "۱۲-۱۵", rest: 60, note: "کشش کامل سینه" },
+                    { id: "s6", name: "پشت بازو سیم‌کش طناب", sets: "۳", reps: "۱۲", rest: 60, note: "آرنج ثابت کنار بدن" },
+                    { id: "s7", name: "پشت بازو بالای سر", sets: "۳", reps: "۱۲", rest: 60, note: "کشش کامل پایین حرکت" }
+                ]
+            },
+            sunday: {
+                title: "یکشنبه • پول A",
+                target: "پشت • جلوبازو",
+                exercises: [
+                    { id: "su1", name: "زیر بغل سیم‌کش", sets: "۳", reps: "۸-۱۰", rest: 90, note: "حرکت اصلی" },
+                    { id: "su2", name: "قایقی سیم‌کش نشسته", sets: "۳", reps: "۱۰-۱۲", rest: 90, note: "کمر صاف" },
+                    { id: "su3", name: "قایقی تک دست دمبل", sets: "۳", reps: "۱۰-۱۲", rest: 90, note: "کنترل شده" },
+                    { id: "su4", name: "فیس پول", sets: "۳", reps: "۱۲-۱۵", rest: 60, note: "هدف عضلات پشت شانه" },
+                    { id: "su5", name: "جلوبازو هالتر EZ", sets: "۳", reps: "۱۰-۱۲", rest: 60, note: "بدون تاب دادن" },
+                    { id: "su6", name: "جلوبازو چکشی", sets: "۳", reps: "۱۲", rest: 60, note: "کنترل منفی" },
+                    { id: "su7", name: "هایپراکستنشن", sets: "۳", reps: "۱۲", rest: 60, note: "کنترل شده، بدون کمرزدن" }
+                ]
+            },
+            monday: {
+                title: "دوشنبه • پا (Legs)",
+                target: "پا • ساق • میان‌تنه",
+                exercises: [
+                    { id: "m1", name: "اسکات (گابلت/هالتر)", sets: "۳", reps: "۱۰", rest: 120, note: "عمق راحت، زانو در راستای پنجه" },
+                    { id: "m2", name: "پرس پا", sets: "۳", reps: "۱۲", rest: 120, note: "پاشنه روی صفحه" },
+                    { id: "m3", name: "ددلیفت رومانیایی سبک", sets: "۳", reps: "۱۰", rest: 120, note: "کمر صاف، لگن به عقب" },
+                    { id: "m4", name: "جلو پا دستگاه", sets: "۳", reps: "۱۵", rest: 60, note: "کنترل شده" },
+                    { id: "m5", name: "پشت پا خوابیده", sets: "۳", reps: "۱۲", rest: 60, note: "تمرکز روی همسترینگ" },
+                    { id: "m6", name: "ساق ایستاده", sets: "۳", reps: "۱۵", rest: 60, note: "کشش کامل" },
+                    { id: "m7", name: "پلانک", sets: "۴", reps: "۴۵ ثانیه", rest: 30, note: "ثابت ۱ ثانیه در بالا" }
+                ]
+            },
+            tuesday: { title: "سه‌شنبه • استراحت", target: "ریکاوری", exercises: [] },
+            wednesday: {
+                title: "چهارشنبه • پوش B",
+                target: "شانه • سینه • پشت بازو",
+                exercises: [
+                    { id: "w1", name: "پرس سرشانه دمبل نشسته", sets: "۳", reps: "۸-۱۰", rest: 120, note: "حرکت اصلی روز" },
+                    { id: "w2", name: "پرس سینه دستگاه/هالتر", sets: "۳", reps: "۱۰-۱۲", rest: 120, note: "کنترل شده" },
+                    { id: "w3", name: "نشر جانب سیم‌کش", sets: "۳", reps: "۱۲-۱۵", rest: 60, note: "بدون تاب" },
+                    { id: "w4", name: "شنا / دیپ کمکی", sets: "۳", reps: "تا ناتوانی", rest: 90, note: "فرم صحیح" },
+                    { id: "w5", name: "کراس اور سیم‌کش", sets: "۳", reps: "۱۲-۱۵", rest: 60, note: "انقباض کامل" },
+                    { id: "w6", name: "پشت بازو خوابیده", sets: "۳", reps: "۱۰-۱۲", rest: 60, note: "آرنج ثابت" },
+                    { id: "w7", name: "نشر خم دمبل", sets: "۳", reps: "۱۲-۱۵", rest: 60, note: "وزنه سبک و کنترل شده" }
+                ]
+            },
+            thursday: {
+                title: "پنجشنبه • پول B",
+                target: "پشت • جلوبازو + پا تکمیلی",
+                exercises: [
+                    { id: "th1", name: "بارفیکس کمکی / زیربغل دست جمع", sets: "۳", reps: "۸-۱۰", rest: 90, note: "کشش کامل" },
+                    { id: "th2", name: "قایقی T-بار یا سینه‌تکیه", sets: "۳", reps: "۱۰", rest: 90, note: "بدون تاب" },
+                    { id: "th3", name: "پول اور سیم‌کش", sets: "۲", reps: "۱۲-۱۵", rest: 60, note: "بدون چرخاندن شانه" },
+                    { id: "th4", name: "شراگ دمبل", sets: "۳", reps: "۱۲", rest: 60, note: "کشش کامل" },
+                    { id: "th5", name: "جلوبازو دمبل اینکلاین", sets: "۳", reps: "۱۲", rest: 60, note: "کنترل شده" },
+                    { id: "th6", name: "جلوبازو سیم‌کش", sets: "۲", reps: "۱۲", rest: 60, note: "انقباض کامل" },
+                    { id: "th7", name: "پشت پا خوابیده (تکمیلی)", sets: "۳", reps: "۱۲", rest: 60, note: "تکمیلی" },
+                    { id: "th8", name: "ساق نشسته (تکمیلی)", sets: "۳", reps: "۱۵", rest: 45, note: "تکمیلی" }
+                ]
+            },
+            friday: { title: "جمعه • استراحت", target: "ریکاوری کامل", exercises: [] }
+        };
+
+        // ================= دیتای تغذیه =================
+        const dietData = {
+            training: {
+                calories: 3310, protein: 181, carbs: 454, fat: 86,
+                meals: [
+                    { time: "۰۸:۰۰", name: "صبحانه", items: "تخم‌مرغ کامل ۳ عدد + جو دوسر خام ۴۰ گرم + شیر کامل ۲۰۰ میلی‌لیتر + نان سنگک ۱۱۰ گرم + موز متوسط ۱ عدد" },
+                    { time: "۱۱:۰۰", name: "میان‌وعده (شبک)", items: "وی ایزوله ۱ اسکوپ + شیر کامل ۲۰۰ میلی‌لیتر + کره بادام‌زمینی ۱۰ گرم + خرما ۵ عدد" },
+                    { time: "۱۴:۰۰", name: "ناهار", items: "سینه مرغ خام ۱۳۰ گرم + برنج پخته ۳۴۰ گرم + سبزیجات کم‌کربو ۱۵۰ گرم + روغن زیتون ۲ قاشق چای‌خوری" },
+                    { time: "۱۶:۳۰", name: "پیش‌تمرین", items: "نان سنگک ۷۰ گرم + موز متوسط ۱ عدد + عسل ۲ قاشق چای‌خوری" },
+                    { time: "۲۰:۱۵", name: "شام (پس‌تمرین)", items: "گوشت گاو کم‌چرب خام ۱۳۰ گرم + برنج پخته ۳۰۰ گرم + سبزیجات کم‌کربو ۲۰۰ گرم + روغن زیتون ۲ قاشق چای‌خوری + پنیر کاتیج کم‌چرب ۱۵۰ گرم" },
+                    { time: "۲۳:۳۰", name: "قبل خواب", items: "پنیر کاتیج کم‌چرب ۱۵۰ گرم + گردو ۱۰ گرم" }
+                ]
+            },
+            rest: {
+                calories: 2950, protein: 183, carbs: 365, fat: 85,
+                meals: [
+                    { time: "۰۸:۰۰", name: "صبحانه", items: "تخم‌مرغ کامل ۳ عدد + جو دوسر خام ۴۰ گرم" },
+                    { time: "۱۱:۰۰", name: "میان‌وعده (شبک)", items: "شیر کامل ۲۰۰ میلی‌لیتر + نان سنگک ۷۰ گرم + موز متوسط ۱ عدد + وی ایزوله ۱ اسکوپ" },
+                    { time: "۱۴:۰۰", name: "ناهار", items: "شیر کامل ۲۰۰ میلی‌لیتر + کره بادام‌زمینی ۱۰ گرم + خرما ۵ عدد + سینه مرغ خام ۱۳۰ گرم" },
+                    { time: "۱۷:۳۰", name: "میان‌وعده", items: "برنج پخته ۲۷۰ گرم + سبزیجات کم‌کربو ۱۵۰ گرم + روغن زیتون ۳ قاشق چای‌خوری + ماست یونانی کم‌چرب ۱۵۰ گرم" },
+                    { time: "۲۰:۱۵", name: "شام", items: "موز متوسط ۱ عدد + عسل ۳ قاشق چای‌خوری + گوشت گاو کم‌چرب خام ۱۳۰ گرم + برنج پخته ۲۵۰ گرم + سبزیجات کم‌کربو ۲۰۰ گرم" },
+                    { time: "۲۳:۳۰", name: "قبل خواب", items: "روغن زیتون ۲ قاشق چای‌خوری + پنیر کاتیج کم‌چرب ۱۵۰ گرم + گردو ۱۰ گرم" }
+                ]
+            }
+        };
+
+        // ================= توابع مدیریتی =================
+        function getTodayKey() {
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            return days[new Date().getDay()];
+        }
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function renderWorkout() {
+            const workout = workoutData[getTodayKey()];
+            document.getElementById('workout-day-title').innerText = workout.title;
+            document.getElementById('workout-target').innerText = workout.target;
+            
+            const list = document.getElementById('workout-list');
+            list.innerHTML = '';
+
+            if(workout.exercises.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--accent-primary); font-weight: 800; font-size: 14px;">امروز روز استراحت است. ریکاوری کنید.</div>`;
+                return;
+            }
+
+            workout.exercises.forEach(ex => {
+                const isChecked = localStorage.getItem(`ex_${ex.id}`) === 'true' ? 'checked' : '';
+                const savedWeight = localStorage.getItem(`weight_${ex.id}`) || '';
+                const savedReps = localStorage.getItem(`reps_${ex.id}`) || '';
+                
+                list.innerHTML += `
+                    <div class="exercise-item">
+                        <div class="exercise-main">
+                            <div class="exercise-info">
+                                <h4>${ex.name}</h4>
+                                <p>هدف: ${ex.sets} ست × ${ex.reps} تکرار</p>
+                                <span class="exercise-note">${ex.note}</span>
+                            </div>
+                            <input type="checkbox" class="custom-checkbox" ${isChecked} onchange="toggleExercise('${ex.id}', this)">
+                        </div>
+                        <div class="exercise-controls">
+                            <input type="text" inputmode="decimal" placeholder="وزن (kg)" value="${savedWeight}" onchange="saveData('weight', '${ex.id}', this.value)">
+                            <input type="text" inputmode="numeric" placeholder="تکرار" value="${savedReps}" onchange="saveData('reps', '${ex.id}', this.value)">
+                            <button class="timer-btn" onclick="startTimer(${ex.rest})">تایمر (${ex.rest} ث)</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleExercise(id, checkbox) {
+            localStorage.setItem(`ex_${id}`, checkbox.checked);
+        }
+
+        function saveData(type, id, value) {
+            localStorage.setItem(`${type}_${id}`, value);
+        }
+
+        function renderDiet() {
+            const type = document.getElementById('diet-day-type').value;
+            const diet = dietData[type];
+            
+            document.getElementById('macro-summary').innerHTML = `
+                <div class="macro-box"><span>کالری</span><strong>${diet.calories}</strong></div>
+                <div class="macro-box"><span>پروتئین</span><strong>${diet.protein}g</strong></div>
+                <div class="macro-box"><span>کربو</span><strong>${diet.carbs}g</strong></div>
+                <div class="macro-box"><span>چربی</span><strong>${diet.fat}g</strong></div>
+            `;
+
+            const list = document.getElementById('diet-list');
+            list.innerHTML = '';
+
+            diet.meals.forEach((meal, index) => {
+                const mealId = `meal_${type}_${index}`;
+                const isChecked = localStorage.getItem(mealId) === 'true' ? 'checked' : '';
+                
+                list.innerHTML += `
+                    <div class="meal-item">
+                        <div class="meal-info">
+                            <h4>${meal.time} - ${meal.name}</h4>
+                            <p>${meal.items}</p>
+                        </div>
+                        <input type="checkbox" class="custom-checkbox" ${isChecked} onchange="toggleMeal('${mealId}', this)">
+                    </div>
+                `;
+            });
+        }
+
+        function toggleMeal(id, checkbox) {
+            localStorage.setItem(id, checkbox.checked);
+        }
+
+        function updateCoachTip() {
+            const week = parseInt(document.getElementById('week-selector').value);
+            const tipEl = document.getElementById('coach-tip');
+            let text = '';
+
+            if (week <= 2) {
+                text = "<strong>هفته آشنایی:</strong> وزنه سبک (۳ تا ۴ تکرار مانده)، تمرکز روی فرم و دامنه کامل. تمام تمرکزت روی یادگیری فرم صحیح حرکات باشد.";
+            } else if (week <= 6) {
+                text = "<strong>فاز اضافه بار:</strong> پیشرفت منظم. اضافه بار هر جلسه با هر هفته طبق قانون بازه تکرار.";
+            } else if (week === 7) {
+                text = "<strong>هفته دیلود (ریکاوری):</strong> یک ست کمتر در هر حرکت و ۸۰٪ وزنه‌ها. بدنت به ریکاوری نیاز دارد.";
+            } else if (week <= 11) {
+                text = "<strong>پیشرفت ادامه‌دار:</strong> همان ساختار: وزنه‌ها بالاتر از هفته ۶. روی کنترل فاز منفی تمرکز کن.";
+            } else {
+                text = "<strong>هفته ارزیابی:</strong> دیلود + ارزیابی. وزن، دور بازو/سینه/ران/کمر، عکس و بازبینی برنامه.";
+            }
+            tipEl.innerHTML = text;
+        }
+
+        // ================= سیستم تایمر =================
+        let timerInterval;
+        const timerDisplay = document.getElementById('floating-timer');
+        const timerText = document.getElementById('timer-text');
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            timerDisplay.classList.add('active');
+            let timeLeft = seconds;
+
+            function updateDisplay() {
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                timerText.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            }
+
+            updateDisplay();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    timerText.innerText = "پایان استراحت";
+                    timerDisplay.style.borderColor = "#2ecc71"; // سبز برای پایان
+                    
+                    // پخش صدای بیپ
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const oscillator = audioCtx.createOscillator();
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+                        oscillator.connect(audioCtx.destination);
+                        oscillator.start();
+                        oscillator.stop(audioCtx.currentTime + 0.5);
+                    } catch(e) { console.log("Audio not supported"); }
+                } else {
+                    updateDisplay();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerDisplay.classList.remove('active');
+            timerDisplay.style.borderColor = "var(--accent-primary)";
+        }
+
+        // ================= راه‌اندازی اولیه =================
+        window.onload = function() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('today-date').innerText = new Date().toLocaleDateString('fa-IR', options);
+
+            const weekSelector = document.getElementById('week-selector');
+            for(let i=1; i<=12; i++) {
+                weekSelector.innerHTML += `<option value="${i}">هفته ${i}</option>`;
+            }
+            
+            const today = getTodayKey();
+            if(today === 'tuesday' || today === 'friday') {
+                document.getElementById('diet-day-type').value = 'rest';
+            }
+
+            renderWorkout();
+            renderDiet();
+            updateCoachTip();
+        };
+    </script>
+</body>
+</html>
