@@ -10,7 +10,7 @@
         :root {
             /* پالت رنگی اصلی */
             --bg-base: #EAF2F2;
-            --bg-card: rgba(191, 201, 209, 0.85); /* افکت شیشه‌ای */
+            --bg-card: rgba(191, 201, 209, 0.85); 
             --bg-card-solid: #BFC9D1;
             --bg-input: rgba(255, 255, 255, 0.7);
             --text-main: #25343F;
@@ -189,7 +189,6 @@
             display: block;
         }
 
-        /* انیمیشن نرم برای تب‌ها */
         @keyframes slideUpFade {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -327,7 +326,7 @@
             width: 28px;
             height: 28px;
             border: 2px solid var(--check-border);
-            border-radius: 50%; /* کاملاً دایره‌ای */
+            border-radius: 50%; 
             cursor: pointer;
             position: relative;
             flex-shrink: 0;
@@ -337,7 +336,7 @@
         }
 
         .custom-checkbox:active {
-            transform: scale(0.85); /* افکت فشردن هنگام کلیک */
+            transform: scale(0.85); 
         }
 
         .custom-checkbox:checked {
@@ -346,14 +345,12 @@
             animation: popBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* انیمیشن پاپ (بزرگ و کوچک شدن) هنگام تیک خوردن */
         @keyframes popBounce {
             0% { transform: scale(1); }
             50% { transform: scale(1.25); }
             100% { transform: scale(1); }
         }
 
-        /* علامت تیک با انیمیشن کشیده شدن */
         .custom-checkbox::after {
             content: '';
             position: absolute;
@@ -363,13 +360,13 @@
             height: 11px;
             border: solid #fff;
             border-width: 0 2.5px 2.5px 0;
-            transform: rotate(45deg) scale(0); /* در حالت عادی مخفی */
+            transform: rotate(45deg) scale(0); 
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .custom-checkbox:checked::after {
-            transform: rotate(45deg) scale(1); /* هنگام تیک، ظاهر شود */
+            transform: rotate(45deg) scale(1); 
             opacity: 1;
         }
 
@@ -569,9 +566,124 @@
             height: 14px;
             background: var(--border-input);
         }
+
+        /* ================= استایل پاپ‌آپ دارک مود ================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--bg-card-solid);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 30px 24px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: var(--shadow-main);
+            position: relative;
+            transform: translateY(30px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            left: 16px; 
+            background: rgba(37, 52, 63, 0.1);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        
+        .modal-close:active {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            transform: scale(0.9);
+        }
+
+        .modal-icon {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .modal-box h3 {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .modal-box p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .btn-confirm {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-primary);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 155, 81, 0.3);
+        }
+
+        .btn-confirm:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
+
+    <!-- پاپ‌آپ دارک مود -->
+    <div class="modal-overlay" id="themePopupModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeThemePopup()">✕</button>
+            <div class="modal-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </div>
+            <h3>حالت تاریک (Dark Mode)</h3>
+            <p>دانیال جان، در داخل باشگاه ترجیحاً از Dark Mode استفاده کنید تا تمرکز و راحتی چشمان شما در نور کم باشگاه حفظ شود.</p>
+            <button class="btn-confirm" onclick="acceptDarkMode()">بله، فعال کن</button>
+        </div>
+    </div>
 
     <div id="floating-timer" onclick="stopTimer()">
         <span class="timer-display" id="timer-text">00:00</span>
@@ -701,9 +813,10 @@
     </nav>
 
     <script>
-        // ================= سیستم دارک مود =================
+        // ================= سیستم دارک مود و پاپ‌آپ =================
         const themeBtn = document.getElementById('themeBtn');
         const htmlElement = document.documentElement;
+        const themePopupModal = document.getElementById('themePopupModal');
 
         // آیکون‌های SVG
         const sunIcon = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
@@ -726,10 +839,32 @@
             updateThemeIcon(newTheme);
         }
 
-        // بارگذاری تم ذخیره شده
+        // توابع مربوط به پاپ‌آپ
+        function acceptDarkMode() {
+            // تغییر تم به دارک مود
+            htmlElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('app-theme', 'dark');
+            updateThemeIcon('dark');
+            // بستن پاپ آپ
+            themePopupModal.classList.remove('active');
+        }
+
+        function closeThemePopup() {
+            // فقط پاپ آپ را می‌بندد و تم را تغییر نمی‌دهد
+            themePopupModal.classList.remove('active');
+        }
+
+        // بارگذاری تم ذخیره شده در بدو ورود
         const savedTheme = localStorage.getItem('app-theme') || 'light';
         htmlElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
+
+        // نمایش پاپ‌آپ بعد از لود شدن صفحه (با کمی تاخیر برای زیبایی)
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                themePopupModal.classList.add('active');
+            }, 500); // نیم ثانیه بعد از باز شدن اپ ظاهر می‌شود
+        });
 
 
         // ================= دیتای تمرینی =================
@@ -965,9 +1100,8 @@
                 if (timeLeft < 0) {
                     clearInterval(timerInterval);
                     timerText.innerText = "پایان استراحت";
-                    timerDisplay.style.borderColor = "#2ecc71"; // سبز برای پایان
+                    timerDisplay.style.borderColor = "#2ecc71"; 
                     
-                    // پخش صدای بیپ
                     try {
                         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                         const oscillator = audioCtx.createOscillator();
